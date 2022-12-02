@@ -1,0 +1,9 @@
+<div class="menu">
+	<h3>后台管理</h3>
+	<ul>
+		<li{if $do=='index'} class="active"{/if}><a href="./">管理首页</a></li>
+		<li{if $do=='module'} class="active"{/if}><a href="./index.php?do=admin_module">公共模块审核</a></li>
+		<li{if $do=='module'} class="active"{/if}><a href="./index.php?do=admin_module&act=email">Email发信功能模块</a></li>
+		<li{if $do=='module'} class="active"{/if}><a href="./index.php?do=admin_module&act=allfilter">整站过滤模块</a></li>
+	</ul>
+</div>

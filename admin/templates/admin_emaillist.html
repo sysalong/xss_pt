@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>发信Email功能设置模块 - {$show.sitename} - {$show.sitedesc}</title>
+<meta name="keywords" content="{$show.keywords}" />
+<meta name="description" content="{$show.description}" />
+<link type="text/css" rel="stylesheet" href="style/style.css" />
+<link rel="shortcut icon" href="{$url.root}/favicon.ico" />
+<script type="text/javascript" src="{$url.root}/source/js/jquery.js"></script>
+<link type="text/css" rel="stylesheet" href="{$url.root}/source/js/boxy/boxy.css" />
+<script type="text/javascript" src="{$url.root}/source/js/boxy/jquery.boxy.js"></script>
+<script type="text/javascript">
+{literal}
+function Dtest(id,obj,token){
+	if(confirm("注意：测试信件会发送到您个人设置中所保存的邮箱里面！")){
+		$.post('/admin/index.php?do=admin_module&act=testemail&r='+Math.random(),{'id':id,'token':token},function(re){
+			if(re==1){
+				$(obj).parent().parent().remove();
+			}
+		});
+	}
+}
+{/literal}
+</script>
+</head>
+<body>
+{include file="admin_header.html"}
+<div class="wrapper">
+	<div class="main">
+		{include file="admin_menu.html"}
+		<div class="content">
+			<h3>发信Email功能设置模块(随机调用其中一个发信)</h3>
+			<div class="data">
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<td width="120">Email服务器</td>
+							<td width="160">Email邮箱</td>
+							<td width="100">Email密码</td>
+							<td width="130">功能操作</td>
+						</tr>
+					</thead>
+					<tbody>
+					{foreach from=$emaillist key=k item=v}
+						<tr{if $k%2==1} style="background:#e0e0e0"{/if}>
+							<td>{$v.ehost}</td>
+							<td>{$v.euser}</td>
+							<td>{$v.epass}</td>
+							<td><a href="{$url.root}/admin/index.php?do=admin_module&act=delmail&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除邮件</a> ||  <a href="javascript:void(0)" onclick="Dtest('{$v.id}',this,'{$show.user.token}')">测试邮件</a></td>
+						</tr>
+					{/foreach}
+					</tbody>
+				</table>
+				<hr/><hr/>
+				<div class="page">
+				-----------------增加新发送邮件服务器----------------
+				</div>
+				<form style="padding: 10px 15px;" id="formSeting" action="{$url.root}/admin/index.php?do=admin_module&act=emailadd" method="post">
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<td width="120">Email服务器</td>
+							<td width="160">Email邮箱</td>
+							<td width="100">Email密码</td>
+							<td width="100">提交</td>
+						</tr>
+					</thead>
+					<thead>
+						<tr>
+							<td width="120"><input id="ehost" name="ehost" type="text"  style="width:120px" value="" /></td>
+							<td width="160"><input id="euser" name="euser" type="text"  style="width:160px" value="" /></td>
+							<td width="100"><input id="epass" name="epass" type="text"  style="width:100px" value="" /></td>
+							<td width="50"><input class="btn btn-success" id="btnSeting" type="submit" value="提交" /> </td>
+						</tr>
+					</thead>
+				</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="admin_footer.html"}
+</body>
+</html>
