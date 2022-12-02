@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>XSS Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+{include file="header.html"}
+<div class="container">
+{include file="menus.html"}
+<div class="col-sm-9" style="float:right;">
+            	<div class="panel panel-default">
+    			<div class="panel-heading">我的ip-url黑名单 (IP或者URL有一个可以为空,或都不为空，但禁止全部为空提交)</div>  
+	<table class="table" border="0" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th width="200">项目ID</th>
+				<th width="200">黑名单IP</th>
+				<th>黑名单URL</th>
+				<th width="100">创建时间</th>
+				<th width="150">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach from=$ipurlseting item=v}
+			<tr>
+				<td>{$v.moduleid}</td>
+				<td>{$v.ip}</td>
+				<td>{$v.url}</td>
+				<td>{$v.addTime|date_format:'%Y-%m-%d'}</td>
+				<td>
+				<a href="{$url.root}/xss.php?do=user&act=delipurl&id={$v.id}&token={$show.user.token}" onclick="return confirm('确定删除吗?');">删除</a>
+				</td>
+			</tr>
+			{/foreach}
+		</tbody>
+		<form style="padding: 10px 15px;" id="formSeting" action="{$url.root}/xss.php?do=user&act=addipurl" method="post">
+		<div style="padding:5px 10px">
+		项目 I D：<input id="moduleid" name="moduleid" type="text"  style="width:120px" maxlength="20" value="" />*(必填，需要过滤的项目ID值。左侧已经标注。)
+		<p><p>
+		黑名单 I P：<input id="ip" name="ip" type="text"  style="width:120px" maxlength="20" value="" /> (禁止与此处REMOTE_ADDR相同IP入库)
+		<p><p>
+		黑名单URL：<input id="url" name="url" type="text"  style="width:120px" maxlength="255" value="" />  (禁止与此处toplocation相同URL内容入库)
+		<p><p>
+		<input class="btn btn-success" id="btnSeting" type="submit" value="提交" /> 
+		<p>提示：加入黑名单后，对应项目不会再接受此IP或者URL的相关cookies信息。(尽量写域名地址，示例：www.xxxx.com/insde.php  如果光写com那么，只要链接中带有com就直接会过滤掉)
+		</form>
+	</table><br/>
+	<hr/><hr/><p style="padding:5px 10px; text-align: center;">下方是整站过滤机制，只要您插入的网站域名中出现以下字母，都不会加载xss code。</p>
+	<table class="table" border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+			{foreach from=$allfilter item=s}
+			<tr>
+				<td>{$s.filterurl}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+</table>
+</div>
+</div>
+</div>
+</body>
+</html>

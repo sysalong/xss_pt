@@ -1,0 +1,49 @@
+<div class="col-sm-3">
+	<div class="panel panel-default">
+		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/xss.php">我的项目</a><a style="float:right;" href="{$url.root}/xss.php?do=project&act=create">创建</a></div> 
+			<div class="panel-body">
+      			<ul class="nav nav-stacked">
+						{foreach from=$projects item=v}
+						<li><a href="{$url.root}/xss.php?do=project&act=view&id={$v.id}">{$v.title} - [项目ID:{$v.id}]</a></li>
+						{/foreach}
+						</ul>
+	</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/xss.php?do=module">我的模块</a><a style="float:right;" href="{$url.root}/xss.php?do=module&act=create">创建</a></div> 
+			<div class="panel-body">
+      			<ul class="nav nav-stacked">
+		{foreach from=$modules item=v}
+		{if $v.isOpen==0 || ($v.isOpen==1 && $v.isAudit==0)}
+		<li><a href="{$url.root}/xss.php?do=module&act=set&id={$v.id}">{$v.title}</a></li>
+		{/if}
+		{/foreach}
+						</ul>
+	</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><a style="color: #2a6496;" href="{$url.root}/xss.php?do=module">公共模块</a></div> 
+			<div class="panel-body">
+      			<ul class="nav nav-stacked">
+		{foreach from=$modules item=v}
+		{if $v.isOpen==1 && $v.isAudit==1}
+		<li><a href="{$url.root}/xss.php?do=module&act=view&id={$v.id}">{$v.title}</a></li>
+		{/if}
+		{/foreach}
+						</ul>
+	</div>
+	</div>
+	
+		<div class="panel panel-default">
+		<div class="panel-heading"><a style="color: #2a6496;" >友情链接</a></div> 
+			<div class="panel-body">
+      			<ul class="nav nav-stacked">
+				<li><a href="http://www.t00ls.net/"  target="_blank">t00ls论坛</a></li>
+				<li><a href="http://gdd.gd/"  target="_blank">虾米</a></li><!-- 里面所有关于本人的信息您都可以删除，只要对您来说碍眼的话。 ^-^ 如果您不删除，特别欢迎您没事过来本人博客坐坐。 * 本文件哈希值对比：http://gdd.gd/1439.html
+ * ---只要您下载的 [XSS平台源码.rar] 文件与上诉值不同，那绝对非本人提供的无后门源码--	 -->
+						</ul>
+	</div>
+	</div>
+</div>

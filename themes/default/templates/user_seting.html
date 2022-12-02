@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>XSS Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{$url.themePath}/css/css.css">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://www.bootstrapcdn.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+{literal}
+<script>
+function CheckAll(obj){
+	if($(obj).is(":checked")){
+		$(".checon").attr("checked","checked");
+	}else{
+		$(".checon").removeAttr("checked");
+	}
+}
+</script>
+{/literal}
+</head>
+<body>
+{include file="header.html"}
+<div class="container">
+{include file="menus.html"}
+<div class="col-sm-9">
+<div class="panel panel-default">
+    	<div class="panel-heading">个人设置</div>
+<form style="padding: 10px 15px;" id="formSeting" action="{$url.root}/xss.php?do=user&act=submit" method="post">
+<div style="padding:5px 10px">
+邮 箱： <input id="email" name="email" type="text"  style="width:200px" maxlength="30" value="{$email}" /> 发送邮件提醒：{$input1}
+<br>
+</div>
+<div style="padding:5px 10px">
+手 机： <input id="phone" name="phone" type="text"  style="width:200px" maxlength="11" value="{$phone}" />
+</div>
+<div style="padding:5px 10px">
+新 密 码： <input id="newpwd" name="newpwd" type="text"  style="width:200px" maxlength="20" value="" />
+确认密码： <input id="newpwd1" name="newpwd1" type="text"  style="width:200px" maxlength="20" value="" />
+</div>
+<p>无论您修改其中任何一样，都请输入原密码。(不修改密码，新密码处留空即可。)<p>
+<div style="padding:5px 10px">
+旧 密 码： <input id="pwd" name="pwd" type="text"  style="width:200px" maxlength="20" value="" /> (* 此处必填项)
+</div>
+<!-- 您不用看了，暂时不支持，功能没开发你钩也没用。 发送短信提醒:{$input2} -->
+<input class="btn btn-success" id="btnSeting" type="submit" value="提交" /> 
+</form>
+
+</div>
+<hr/><hr/>
+<p>下面是给您发信的服务器及邮箱，请您把它加入您邮箱的白名单(否则可能会收不到邮件)。<p>
+<table class="table" border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+			{foreach from=$emailstmp item=v}
+			<tr>
+				<td>{$v.ehost}</td>
+				<td>{$v.euser}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+</table>
+</div>
+<script type="text/javascript">
+{literal}
+function Register(){
+	var errNum=0;
+	var checkItems=['phone','email','pwd','pwd2'];
+	for(var i=0;i<checkItems.length;i++){
+		if($("#"+checkItems[i]).val()==""){
+			errNum++;
+			$("#"+checkItems[i]+"_check").addClass("error");
+			$("#"+checkItems[i]+"_check").html("不能为空");
+		}else{
+			$("#"+checkItems[i]+"_check").addClass("correct");
+			$("#"+checkItems[i]+"_check").html("√");
+		}
+	}
+	/* 特殊判断 */
+	//邮箱格式
+	var email=$("#email").val();
+	if(email!=""){
+		if(!/^(\w+\.)*?\w+@(\w+\.)+\w+$/.test(email)){
+			errNum++;
+			$("#email_check").removeClass("correct");
+			$("#email_check").addClass("error");
+			$("#email_check").html("邮箱格式不正确");
+		}else{
+			$("#email_check").removeClass("error");
+			$("#email_check").addClass("correct");
+			$("#email_check").html("√");
+		}
+	}
+	//电话格式
+	var phone=$("#phone").val();
+	if(phone!=""){
+		if(!/^(\d{11})$/.test(phone)){
+			errNum++;
+			$("#phone_check").removeClass("correct");
+			$("#phone_check").addClass("error");
+			$("#phone_check").html("手机格式不正确");
+		}else{
+			$("#phone_check").removeClass("error");
+			$("#phone_check").addClass("correct");
+			$("#phone_check").html("√");
+		}
+	}
+	//密码
+	var pwd=$("#pwd").val();
+	if(pwd!="")
+	{
+		if(!/^\w{6,20}$/.test(pwd)){
+			errNum++;
+			$("#pwd_check").removeClass("correct");
+			$("#pwd_check").addClass("error");
+			$("#pwd_check").html("6-20个字符");
+		}else{
+			$("#pwd_check").removeClass("error");
+			$("#pwd_check").addClass("correct");
+			$("#pwd_check").html("√");
+		}
+	}
+	//确认密码
+	var pwd2=$("#pwd2").val();
+	if(pwd2!="")
+	{
+		if(pwd2!=pwd){
+			errNum++;
+			$("#pwd2_check").removeClass("correct");
+			$("#pwd2_check").addClass("error");
+			$("#pwd2_check").html("两次输入密码不相同");
+		}else{
+			$("#pwd2_check").removeClass("error");
+			$("#pwd2_check").addClass("correct");
+			$("#pwd2_check").html("√");
+		}
+	}
+	//提交注册
+}
+{/literal}
+</script>
+</body>
+</html>
