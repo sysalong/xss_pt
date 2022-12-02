@@ -1,0 +1,11 @@
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^([0-9a-zA-Z]{4})$ xss.php?do=code&urlKey=$1
+RewriteRule ^([0-9a-zA-Z]{6})$ xss.php?do=code&urlKey=$1
+RewriteRule ^do/auth/(\w+?)(/domain/([\w\.]+?))?$ xss.php?do=do&auth=$1&domain=$3
+RewriteRule ^register/(.*?)$ xss.php?do=register&key=$1 
+RewriteRule ^register-validate/(.*?)$ xss.php?do=register&act=validate&key=$1
+RewriteRule ^login$ xss.php?do=login
+</IfModule>
